@@ -1,0 +1,50 @@
+{
+  "notes": "Public, permitted job feeds only. Add employers by their real board identifiers; never guess identifiers or bypass access restrictions. Existing seed identifiers are carried over from Career Hub. The search checks these on the server every day.",
+  "feeds": [
+    {
+      "type": "smart",
+      "slug": "PAConsulting",
+      "name": "PA Consulting"
+    },
+    {
+      "type": "smart",
+      "slug": "AECOM2",
+      "name": "AECOM"
+    },
+    {
+      "type": "smart",
+      "slug": "LegalAndGeneral",
+      "name": "Legal & General"
+    },
+    {
+      "type": "smart",
+      "slug": "Experian",
+      "name": "Experian"
+    },
+    {
+      "type": "smart",
+      "slug": "UnitedLivingGroup",
+      "name": "United Living Group"
+    },
+    {
+      "type": "smart",
+      "slug": "Bertelsmann-Jobs",
+      "name": "Bertelsmann"
+    },
+    {
+      "type": "smart",
+      "slug": "BoschGroup",
+      "name": "Bosch"
+    },
+    {
+      "type": "smart",
+      "slug": "Version1",
+      "name": "Version 1"
+    },
+    {
+      "type": "smart",
+      "slug": "TurnerTownsend",
+      "name": "Turner & Townsend"
+    }
+  ]
+}

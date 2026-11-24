@@ -127,52 +127,7 @@ def search(level=6):
     return dict(jobs=list(found.values()),partial=partial,checked=datetime.now(timezone.utc).isoformat())
 
 
-# General web discovery searches by discipline and region, not employer name.
-# A Brave Search API key is optional and stays in this local process.
-SECTORS=['digital technology cyber security software data','engineering manufacturing','finance accounting actuarial banking','business consulting management','construction surveying property','healthcare life sciences nursing','law legal solicitor','energy utilities transport','retail logistics supply chain','marketing communications media','education public services','agriculture environment hospitality']
-REGIONS=['London','South East England','West Midlands','East Midlands','North West England','North East England','Yorkshire and the Humber','South West England','East of England','Scotland','Wales','Northern Ireland']
-YEAR=datetime.now().year+1 if datetime.now().month>=8 else datetime.now().year
-QUERIES=[f'UK degree apprenticeship {YEAR} applications open',f'UK level 6 apprenticeship {YEAR} vacancies careers',f'UK degree apprentice vacancies apply now']+[f'UK degree apprenticeship {YEAR} {x} apply' for x in SECTORS]+[f'{x} degree apprenticeship {YEAR} vacancies apply' for x in REGIONS]+[f'UK {x} degree apprentice vacancies apply' for x in ['technology solutions','cyber security','software developer','data science','business management','chartered manager','financial services','quantity surveyor','graduate apprenticeship Scotland','degree apprenticeships Wales','higher level apprenticeship degree Northern Ireland']]
-QUERIES=list(dict.fromkeys(QUERIES+[f'UK {YEAR} apprenticeship {x} careers vacancy degree programme' for x in ['digital technology solutions','software engineering','cyber security analyst','data analyst','business analyst','professional services','chartered accountant','project management','quantity surveying','civil engineering','solicitor','insurance','actuarial']]))
-BRAVE_KEY=os.environ.get('BRAVE_SEARCH_API_KEY','').strip()
-
-def clean_text(value):
-    return re.sub(r'\s+',' ',html.unescape(re.sub(r'<[^>]+>',' ',str(value or '')))).strip()
-
-def parse_web(payload):
-    out=[]
-    for row in payload.get('web',{}).get('results',[]):
-        title=clean_text(row.get('title'));desc=clean_text(row.get('description'));url=str(row.get('url',''));p=urlparse(url)
-        if p.scheme not in ('http','https') or not p.hostname or not title:continue
-        text=title+' '+desc
-        if not re.search(r'\b(?:apprentice|apprentices|apprenticeship|apprenticeships)\b',text,re.I):continue
-        if re.search(r'\b(weapons?|munitions?|missiles?|firearms?|explosives?)\b',text,re.I):continue
-        if CLOSED.search(text) or BLOCK.search(text):continue
-        if re.search(r'\b(how to (?:find|apply)|what is (?:a|an)|guide to|salary guide|interview tips|practice tests)\b',title,re.I):continue
-        # Search engine excerpts can be stale or generic. Never assert a lead is open.
-        match=re.search(r'\b(?:level\s*|L)([2-7])\b',text,re.I)
-        level=match[1] if match else ('Degree' if re.search(r'degree apprentice|graduate apprentice',text,re.I) else 'Unconfirmed')
-        if level not in ('6','7','Degree','Unconfirmed'):continue
-        salary=re.search(r'£\s?\d{2,3},\d{3}(?:\s*[-–]\s*£?\d{2,3},\d{3})?',desc)
-        out.append(dict(id='web:'+hashlib.sha256(url.split('#')[0].encode()).hexdigest()[:24],company=p.hostname.removeprefix('www.'),title=title,location='UK search · confirm location',sector=sector(text),level=level,salary=salary.group() if salary else '',deadline='',start='',duration='',university='',requirements='',description=desc+' — Search result excerpt. Verify current vacancy status, location and entry requirements on the original advert.',url=url,live=False,discovery=True,source='Wider web (Brave Search)'))
-    return out
-
-def search_web(key):
-    if not key:return [],dict(name='Wider web (Brave Search)',ok=False,message='Not configured. Set a Brave Search API key in the launcher for automatic discovery.')
-    out={};success=0;errors=0
-    for q in QUERIES:
-        try:
-            params=urlencode(dict(q=q,count=20,country='GB',search_lang='en',safesearch='strict'))
-            req=Request('https://api.search.brave.com/res/v1/web/search?'+params,headers={'Accept':'application/json','X-Subscription-Token':key,'User-Agent':'CareerHubPersonal/2.0'})
-            with urlopen(req,timeout=5) as r: payload=json.loads(r.read(2_000_000))
-            for job in parse_web(payload):out[job['id']]=job
-            success+=1
-        except Exception as e:
-            errors+=1
-            if getattr(e,'code',0) in (401,403,429):break
-            if errors>=8:break
-        time.sleep(.3)
-    return list(out.values()),dict(name='Wider web (Brave Search)',ok=success>0,partial=success<len(QUERIES),message=f'{success}/{len(QUERIES)} queries completed; {len(out)} unverified leads. '+('Some queries failed or were not attempted.' if success<len(QUERIES) else 'Check each advert before applying.'))
+# Wider-web searches are manual links in this free edition. No paid API client.
 
 def national_gov(level=6):
     name='GOV.UK Level '+str(level)
@@ -305,23 +260,29 @@ def canonical(url):
     p=urlparse(url); query=urlencode([(k,v) for k,v in parse_qsl(p.query) if not k.lower().startswith('utm_') and k.lower() not in ('source','ref','tracking')]);return urlunparse((p.scheme,p.netloc.lower(),p.path.rstrip('/'),'',query,''))
 
 def nationwide():
-    tasks=[national_gov,lambda:national_gov(7),ucas_search,open_search,lambda:search_web(BRAVE_KEY)]
+    from employer_feeds import registry, run_feed
+    tasks=[national_gov,lambda:national_gov(7),ucas_search,open_search]+[lambda f=f:run_feed(f) for f in registry()]
     try:old=json.loads(SOURCE_CACHE.read_text(encoding='utf-8'))
     except Exception:old={}
     result={};statuses=[]
     today=datetime.now(timezone.utc).date().isoformat()
     old_by_url={canonical(j['url']):j for records in old.values() if isinstance(records,list) for j in records if isinstance(j,dict) and j.get('url')}
+    def retain(j):
+        try:
+            seen=datetime.fromisoformat(j.get('lastSeen') or j.get('firstSeen') or '').date()
+            return (not j.get('deadline') or j['deadline']>=today) and 0<=(datetime.now(timezone.utc).date()-seen).days<=14
+        except (ValueError,TypeError):return False
     with ThreadPoolExecutor(max_workers=5) as ex:
         for f in [ex.submit(t) for t in tasks]:
             try:jobs,status=f.result()
             except Exception as e:jobs=[];status=dict(name='Unknown source',ok=False,message=str(e))
             name=status['name'];previous=old.get(name,[])
             # Preserve missing records when a source was unavailable or only partially read.
-            merged={j['id']:{**j,'cached':True} for j in previous if not j.get('deadline') or j['deadline']>=datetime.now().date().isoformat()} if not status.get('ok') or status.get('partial') else {}
+            merged={j['id']:{**j,'cached':True} for j in previous if retain(j)} if not status.get('ok') or status.get('partial') else {}
             for j in jobs:
                 prev=old_by_url.get(canonical(j['url']),{})
                 if j.get('deadline') and j['deadline']<today:continue
-                merged[j['id']]={**j,'source':name,'cached':False,'posted':j.get('posted') or prev.get('posted',''),'firstSeen':prev.get('firstSeen') or today}
+                merged[j['id']]={**j,'source':name,'cached':False,'posted':j.get('posted') or prev.get('posted',''),'firstSeen':prev.get('firstSeen') or today,'lastSeen':today}
             result[name]=list(merged.values());statuses.append(status)
     try:SOURCE_CACHE.write_text(json.dumps(result,ensure_ascii=False),encoding='utf-8')
     except OSError:pass
@@ -361,8 +322,7 @@ if __name__=='__main__':
     if not HTML.exists():raise SystemExit('Keep Career_Hub.html beside this launcher.')
     try:server=ThreadingHTTPServer(('127.0.0.1',PORT),Handler)
     except OSError:raise SystemExit('Port 8765 is already in use. Close the other Career Hub window or server first.')
-    if not BRAVE_KEY:
-        print('Optional: set BRAVE_SEARCH_API_KEY before launching for wider-web searches. Each refresh uses up to '+str(len(QUERIES))+' API requests; provider limits and charges may apply.')
+    print('Free public sources only; paid search is disabled.')
     print('Career Hub: http://127.0.0.1:8765/\nKeep this window open while using the site. Press Ctrl+C to stop.')
     webbrowser.open('http://127.0.0.1:8765/')
     try:server.serve_forever()

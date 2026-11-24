@@ -28,8 +28,6 @@ jobs:
           key: vacancy-cache-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: vacancy-cache-
       - name: Refresh public vacancy data
-        env:
-          BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
         run: python update_vacancies.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
