@@ -1,3 +1,19 @@
+# Applicant-focused update — deployment notes
+
+This release removes the search-coverage page, source lists and external directory shortcuts from the public vacancy interface. A small refresh indicator retains the publication time and warns if results may be incomplete. Detailed hourly search diagnostics remain in the GitHub Actions logs. The search engine, employer feeds and cron schedule are unchanged.
+
+New **My next steps** area: application pipeline counts, upcoming and overdue actions, skills evidence checklist, interview and assessment reflection journal, monthly living-cost budget planner, offer checklist and editable recruiter message templates. New personal data is stored locally, included in existing private backup exports and optional cloud backups. It is not included in the public vacancies database.
+
+## Update an existing deployment
+
+1. Export a private backup using the Account page. Do not commit the backup to a public repository.
+2. Fetch and pull in GitHub Desktop. Extract this ZIP over the existing repository, retaining your deployed `site/config.js` and `site/vacancies.json`. The existing Supabase and donation settings should not be overwritten.
+3. Commit and push. Check the Actions run; after deployment refresh the same website.
+
+Tested with isolated Chromium and simulated offline network: navigation, hidden diagnostics, skills checklist, journal, budget arithmetic, backup payload, templates and mobile scrolling. No change to live authentication or search engine was made.
+
+---
+
 ## Monzo donation update
 
 The supplied config.js includes the requested Monzo.me payment link. Confirm with Monzo that the link is suitable for public website donations before publishing. If you already have a configured Supabase account, preserve your deployed config.js and change only donationUrl to the value in the included config.js; otherwise the included config.js can replace your unconfigured file. Preserve site/vacancies.json. Sign-in still requires Supabase setup. No payment processing is performed by Career Hub.
@@ -64,3 +80,6 @@ The guest account page no longer exposes developer configuration messages. It of
 
 ## Trackr external search
 Trackr is included in the additional search links and Search coverage page. It is an external research resource, not an automated data source. Trackr's terms (https://the-trackr.com/terms-of-use/) prohibit automated extraction and using platform data to populate a competing service without the required permission. The hourly workflow does not request Trackr pages, harvest or republish Trackr listings. Contact Trackr directly about an authorised feed or integration if desired.
+
+## Direct application links
+Vacancy cards now include a one-click application button. The hourly engine preserves the original advert URL and stores a separate `applyUrl` when a public, role-specific employer link is available. Employer feeds use their published application link where supplied, otherwise the employer's own advert. For GOV.UK, the resolver checks up to 80 public vacancy detail pages per run, caches successful checks for 24 hours, and prioritises the oldest unchecked records. It does not sign in, guess application URLs, or follow arbitrary external pages. Where a direct URL cannot be found, the button is labelled View listing. Existing vacancy IDs and personal tracker data remain unchanged. The original listing may still be needed to complete applications that require the official service.

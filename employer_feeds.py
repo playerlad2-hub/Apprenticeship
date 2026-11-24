@@ -35,7 +35,7 @@ def request(url, xml=False):
     if len(raw)>12_000_000:raise ValueError('Feed exceeds safety size limit')
     return ET.fromstring(raw) if xml else json.loads(raw)
 
-def normalized(f, ident, title, loc, url, description='', posted='', closing='', salary=''):
+def normalized(f, ident, title, loc, url, description='', posted='', closing='', salary='', apply_url=''):
     title=text(title); loc=text(loc); desc=text(description); url=str(url or '')
     if not ident or not APP.search(title) or BLOCK.search(title+' '+desc) or (CLOSED.search(title) or re.search(r'\b(?:applications (?:are |now )?closed|no longer accepting applications)\b',desc,re.I)):return None
     if re.search(r'\b(?:apprentice(?:ship)? (?:trainer|assessor|coordinator|manager|coach)|(?:trainer|assessor|coordinator|manager|coach) (?:for|of) apprentice)',title,re.I):return None
@@ -63,7 +63,8 @@ def normalized(f, ident, title, loc, url, description='', posted='', closing='',
     level=lev[1] if lev else 'Degree' if DEG.search(title+' '+desc) else 'Unconfirmed'
     # Keep unconfirmed-level openings separate from confirmed degree-level adverts.
     from vacancy_search import sector
-    return dict(id='ats:'+f['type']+':'+f['slug'].lower()+':'+str(ident),company=f['name'],title=title,location=loc,level=level,sector=sector(title),salary=text(salary),posted=date(posted),deadline=closing,start=start,duration='',university='',requirements='Check the employer advert.',description='Published on the employer’s public careers feed. Check degree level, closing date and eligibility on the original listing.',url=url,live=True,discovery=level=='Unconfirmed',source=f['name']+' careers feed')
+    from direct_links import direct_url
+    return dict(applyUrl=direct_url(apply_url) or direct_url(url),id='ats:'+f['type']+':'+f['slug'].lower()+':'+str(ident),company=f['name'],title=title,location=loc,level=level,sector=sector(title),salary=text(salary),posted=date(posted),deadline=closing,start=start,duration='',university='',requirements='Check the employer advert.',description='Published on the employer’s public careers feed. Check degree level, closing date and eligibility on the original listing.',url=url,live=True,discovery=level=='Unconfirmed',source=f['name']+' careers feed')
 
 def run_feed(f):
     kind=f['type']; slug=quote(f['slug'],safe=''); name=f['name']+' careers feed'; out=[]; partial=False
@@ -80,7 +81,7 @@ def run_feed(f):
             for page in range(20):
                 rows=request(f'https://{host}/v0/postings/{slug}?mode=json&limit=100&skip={skip}')
                 if not isinstance(rows,list):raise ValueError('Unexpected feed format')
-                for j in rows:add(j['id'],j.get('text'),j.get('categories',{}).get('allLocations') or j.get('categories',{}).get('location'),j.get('hostedUrl'),j.get('descriptionPlain') or j.get('description'))
+                for j in rows:add(j['id'],j.get('text'),j.get('categories',{}).get('allLocations') or j.get('categories',{}).get('location'),j.get('hostedUrl'),j.get('descriptionPlain') or j.get('description'),apply_url=j.get('applyUrl',''))
                 if len(rows)<100:break
                 skip+=len(rows);time.sleep(.3)
             else:partial=True
@@ -88,7 +89,7 @@ def run_feed(f):
             rows=request(f'https://api.ashbyhq.com/posting-api/job-board/{slug}?includeCompensation=true')['jobs']
             for j in rows:
                 if j.get('isListed') is False:continue
-                add(j.get('id') or hashlib.sha256(str(j.get('jobUrl')).encode()).hexdigest()[:20],j.get('title'),[j.get('location'),j.get('secondaryLocations')],j.get('jobUrl'),j.get('descriptionPlain') or j.get('descriptionHtml'),j.get('publishedAt'))
+                add(j.get('id') or hashlib.sha256(str(j.get('jobUrl')).encode()).hexdigest()[:20],j.get('title'),[j.get('location'),j.get('secondaryLocations')],j.get('jobUrl'),j.get('descriptionPlain') or j.get('descriptionHtml'),j.get('publishedAt'),apply_url=j.get('applyUrl',''))
         elif kind=='smart':
             base=f'https://api.smartrecruiters.com/v1/companies/{slug}/postings'; offset=0
             for page in range(20):
@@ -102,8 +103,8 @@ def run_feed(f):
                     try:
                         detail=request(base+'/'+quote(str(j['id']),safe=''));time.sleep(.15)
                         desc=text(detail.get('jobAd',{}).get('sections',{}))
-                    except Exception:partial=True;desc=''
-                    add(j['id'],j.get('name'),location,f'https://jobs.smartrecruiters.com/{slug}/{quote(str(j["id"]),safe="")}',desc,j.get('releasedDate'))
+                    except Exception:partial=True;desc='';detail={}
+                    add(j['id'],j.get('name'),location,f'https://jobs.smartrecruiters.com/{slug}/{quote(str(j["id"]),safe="")}',desc,j.get('releasedDate'),apply_url=detail.get('applyUrl') or j.get('applyUrl',''))
                 offset+=len(rows)
                 if not rows or offset>=int(payload.get('totalFound',offset)) or len(rows)<100:break
                 time.sleep(.3)

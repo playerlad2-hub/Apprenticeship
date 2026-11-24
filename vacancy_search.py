@@ -284,6 +284,9 @@ def nationwide():
                 if j.get('deadline') and j['deadline']<today:continue
                 merged[j['id']]={**j,'source':name,'cached':False,'posted':j.get('posted') or prev.get('posted',''),'firstSeen':prev.get('firstSeen') or today,'lastSeen':today}
             result[name]=list(merged.values());statuses.append(status)
+    from direct_links import enrich
+    count=enrich(result,old,fetch_html)
+    print(f'Direct employer application links: {count}')
     try:SOURCE_CACHE.write_text(json.dumps(result,ensure_ascii=False),encoding='utf-8')
     except OSError:pass
     best={}
