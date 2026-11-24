@@ -257,7 +257,7 @@ def open_search():
     except Exception as e:return [],dict(name='Open Apprenticeships',ok=False,partial=True,message='Unavailable: '+str(e))
 
 def canonical(url):
-    p=urlparse(url); query=urlencode([(k,v) for k,v in parse_qsl(p.query) if not k.lower().startswith('utm_') and k.lower() not in ('source','ref','tracking')]);return urlunparse((p.scheme,p.netloc.lower(),p.path.rstrip('/'),'',query,''))
+    p=urlparse(url); query=urlencode(sorted((k,v) for k,v in parse_qsl(p.query) if not k.lower().startswith('utm_') and k.lower() not in ('source','ref','tracking','trid','gh_src','fbclid','gclid')));return urlunparse((p.scheme,p.netloc.lower(),p.path.rstrip('/'),'',query,''))
 
 def nationwide():
     from employer_feeds import registry, run_feed
@@ -293,7 +293,11 @@ def nationwide():
             k=canonical(j['url'])
             rank=lambda x:(bool(x.get('live') and not x.get('cached')),not x.get('discovery',False),not x.get('cached',False),bool(x.get('deadline')),bool(x.get('posted')))
             if k not in best or rank(j)>rank(best[k]):best[k]=j
-    jobs=list(best.values())
+    jobs=sorted(best.values(),key=lambda j:(j.get('posted') or '',j.get('firstSeen') or ''),reverse=True)
+    for status in statuses:
+        records=result.get(status['name'],[])
+        status['freshCount']=sum(not j.get('cached') for j in records)
+        status['cachedCount']=sum(bool(j.get('cached')) for j in records)
     return dict(jobs=jobs,sources=statuses,checked=datetime.now(timezone.utc).isoformat())
 
 

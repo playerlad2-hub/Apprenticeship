@@ -1,5 +1,5 @@
 {
-  "notes": "Public, permitted job feeds only. Add employers by their real board identifiers; never guess identifiers or bypass access restrictions. Existing seed identifiers are carried over from Career Hub. The search checks these on the server every day.",
+  "notes": "Public, permitted job feeds only. Add employers by their real board identifiers; never guess identifiers or bypass access restrictions. Existing seed identifiers are carried over from Career Hub. The search checks these on the server every hour.",
   "feeds": [
     {
       "type": "smart",
@@ -45,6 +45,16 @@
       "type": "smart",
       "slug": "TurnerTownsend",
       "name": "Turner & Townsend"
+    },
+    {
+      "type": "greenhouse",
+      "slug": "neptunenorth",
+      "name": "Neptune North"
+    },
+    {
+      "type": "smart",
+      "slug": "AJBell1",
+      "name": "AJ Bell"
     }
   ]
 }

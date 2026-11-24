@@ -37,7 +37,7 @@ def request(url, xml=False):
 
 def normalized(f, ident, title, loc, url, description='', posted='', closing='', salary=''):
     title=text(title); loc=text(loc); desc=text(description); url=str(url or '')
-    if not ident or not APP.search(title) or BLOCK.search(title+' '+desc) or CLOSED.search(title+' '+desc):return None
+    if not ident or not APP.search(title) or BLOCK.search(title+' '+desc) or (CLOSED.search(title) or re.search(r'\b(?:applications (?:are |now )?closed|no longer accepting applications)\b',desc,re.I)):return None
     if re.search(r'\b(?:apprentice(?:ship)? (?:trainer|assessor|coordinator|manager|coach)|(?:trainer|assessor|coordinator|manager|coach) (?:for|of) apprentice)',title,re.I):return None
     if not UK.search(loc) or (re.search(r'\b(?:New York|United States|USA|Canada|Australia|India|Germany|France|Ireland|Singapore)\b',loc,re.I) and not re.search(r'\b(?:UK|GB|GBR|United Kingdom|England|Scotland|Wales|Northern Ireland)\b',loc,re.I)):return None
     p=urlparse(url)
@@ -47,11 +47,23 @@ def normalized(f, ident, title, loc, url, description='', posted='', closing='',
     # An explicit lower level in the title must not be promoted to a degree vacancy.
     if LOW.search(title) and not DEG.search(title):return None
     if LOW.search(desc) and not DEG.search(title+' '+desc):return None
+    # Extract only explicit labelled facts; unknown fields remain blank.
+    if not salary:
+        m=re.search(r'\b(?:starting salary|annual salary|salary)\s*(?:[:–-]|of|is)\s*(£\s*[\d,]+(?:\.\d{1,2})?)(?:\s*(per annum|p\.a\.|a year|per year|per hour|per month|per week))?',desc,re.I)
+        if m:salary=' '.join(x for x in m.groups() if x)
+    start_match=re.search(r'\b(?:start date|commencing(?: in)?|starting(?: in)?|starts in|will start in)\s*[:–-]?\s*((?:January|February|March|April|May|June|July|August|September|October|November|December|Spring|Summer|Autumn|Winter)\s+20\d{2})\b',desc,re.I)
+    start=start_match[1] if start_match else ''
+    if not closing:
+        m=re.search(r'\b(?:closing date(?: for applications)?|application deadline|apply by)\s*[:–-]?\s*(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[, ]+)?(\d{1,2}\s+[A-Za-z]+\s+20\d{2})',desc,re.I)
+        if m:
+            try:closing=datetime.strptime(m[1],'%d %B %Y').date().isoformat()
+            except ValueError:pass
+    if closing and closing<datetime.now(timezone.utc).date().isoformat():return None
     lev=re.search(r'\b(?:level\s*|L)([67])\b',title,re.I) or re.search(r'\b(?:level\s*|L)([67])\b',desc,re.I)
     level=lev[1] if lev else 'Degree' if DEG.search(title+' '+desc) else 'Unconfirmed'
     # Keep unconfirmed-level openings separate from confirmed degree-level adverts.
     from vacancy_search import sector
-    return dict(id='ats:'+f['type']+':'+f['slug'].lower()+':'+str(ident),company=f['name'],title=title,location=loc,level=level,sector=sector(title),salary=text(salary),posted=date(posted),deadline=closing,start='',duration='',university='',requirements='Check the employer advert.',description='Published on the employer’s public careers feed. Check degree level, closing date and eligibility on the original listing.',url=url,live=True,discovery=level=='Unconfirmed',source=f['name']+' careers feed')
+    return dict(id='ats:'+f['type']+':'+f['slug'].lower()+':'+str(ident),company=f['name'],title=title,location=loc,level=level,sector=sector(title),salary=text(salary),posted=date(posted),deadline=closing,start=start,duration='',university='',requirements='Check the employer advert.',description='Published on the employer’s public careers feed. Check degree level, closing date and eligibility on the original listing.',url=url,live=True,discovery=level=='Unconfirmed',source=f['name']+' careers feed')
 
 def run_feed(f):
     kind=f['type']; slug=quote(f['slug'],safe=''); name=f['name']+' careers feed'; out=[]; partial=False
@@ -80,7 +92,10 @@ def run_feed(f):
         elif kind=='smart':
             base=f'https://api.smartrecruiters.com/v1/companies/{slug}/postings'; offset=0
             for page in range(20):
-                payload=request(base+'?'+urlencode({'limit':100,'offset':offset,'q':'apprentice'}));rows=payload['content']
+                params={'limit':100,'offset':offset}
+                # Small boards can be checked in full, without relying on ATS keyword matching.
+                if f['slug'].lower()!='ajbell1':params['q']='apprentice'
+                payload=request(base+'?'+urlencode(params));rows=payload['content']
                 for j in rows:
                     loc=j.get('location',{}); location=' '.join(str(loc.get(k) or '') for k in ('city','region','country'))
                     if not APP.search(j.get('name','')) or not UK.search(location) or BLOCK.search(j.get('name','')):continue
