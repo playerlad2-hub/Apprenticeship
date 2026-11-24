@@ -23,11 +23,31 @@ jobs:
           python-version: '3.12'
       - uses: actions/cache@v4
         with:
-          path: vacancy_cache.json
+          path: |
+            vacancy_cache.json
+            push_seen.json
+            link_health_cache.json
           key: vacancy-cache-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: vacancy-cache-
       - name: Refresh public vacancy data
         run: python update_vacancies.py
+      - name: Check supported application links
+        run: python link_health.py
+        continue-on-error: true
+      - name: Optional background vacancy alerts
+        env:
+          CAREER_SUPABASE_URL: ${{ secrets.CAREER_SUPABASE_URL }}
+          CAREER_SUPABASE_SERVICE_KEY: ${{ secrets.CAREER_SUPABASE_SERVICE_KEY }}
+          CAREER_VAPID_PRIVATE_KEY: ${{ secrets.CAREER_VAPID_PRIVATE_KEY }}
+          CAREER_VAPID_SUBJECT: ${{ secrets.CAREER_VAPID_SUBJECT }}
+        run: |
+          if [ -n "$CAREER_VAPID_PRIVATE_KEY" ] && [ -n "$CAREER_SUPABASE_SERVICE_KEY" ]; then
+            python -m pip install pywebpush==2.0.3
+            python push_updates.py
+          else
+            echo 'Optional push service not configured.'
+          fi
+        continue-on-error: true
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

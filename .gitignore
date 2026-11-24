@@ -2,3 +2,7 @@ __pycache__/
 vacancy_cache.json
 .env
 *.secret
+
+push_seen.json
+link_health_cache.json
+*.pem
