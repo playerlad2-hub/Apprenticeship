@@ -83,7 +83,6 @@ def parse(markup,level=6):
         deadline=iso_date(closing)
         posted_match=re.search(r'\bPosted(?: on)?\s*:?\s*(.*)',txt,re.I)
         posted=iso_date(posted_match[1]) if posted_match else ''
-        if deadline and deadline<datetime.now().date().isoformat():continue
         prefix=after.split('Start date',1)[0].strip()
         # Use semantic paragraph boundaries to separate company and location.
         parts=[]
@@ -141,7 +140,8 @@ UCAS='https://www.ucas.com/explore/search/apprenticeships'
 OPEN='https://www.openapprenticeships.org/search?lvl=6&lvl=7'
 SOURCE_CACHE=Path(__file__).with_name('vacancy_cache.json')
 BLOCK=re.compile(r'\b(weapons?|munitions?|missiles?|firearms?|explosives?|gambling|sports betting|casino|pornograph\w*)\b',re.I)
-CLOSED=re.compile(r'\b(register (?:your )?interest|talent community|applications (?:are |now )?closed|no longer accepting|vacancy (?:is )?closed|coming soon)\b',re.I)
+NOT_VACANCY=re.compile(r'\b(register (?:your )?interest|talent community|coming soon)\b',re.I)
+CLOSED=re.compile(r'\b(applications (?:are |now )?closed|no longer accepting applications|vacancy (?:is )?closed)\b',re.I)
 
 def fetch_html(url):
     req=Request(url,headers={'User-Agent':'CareerHubPersonal/3.0 (personal vacancy search)','Accept':'text/html'})
@@ -167,10 +167,10 @@ def date_numeric(s):
     except ValueError:return ''
 
 def board_job(source,url,title,company,location,level,salary='',deadline='',start='',description='',lead=False):
-    if BLOCK.search(title+' '+description) or CLOSED.search(title):return None
-    if deadline and deadline<datetime.now().date().isoformat():return None
-    if start and re.fullmatch(r'\d{4}-\d\d-\d\d',start) and start<datetime.now().date().isoformat():return None
-    return dict(id='board:'+hashlib.sha256(url.encode()).hexdigest()[:24],company=company or 'See advert',title=title,location=location or 'See advert',level=level,sector=sector(title+' '+description),salary=salary,deadline=deadline,start=start,university='See advert',duration='See advert',requirements='Check the original advert for entry requirements.',description=description or 'Published in '+source+'. Check the original advert for current availability.',url=url,live=not lead,discovery=lead,source=source)
+    if BLOCK.search(title+' '+description) or NOT_VACANCY.search(title):return None
+    closed=bool(CLOSED.search(title+' '+description) or (deadline and deadline<datetime.now().date().isoformat()))
+    if not closed and start and re.fullmatch(r'\d{4}-\d\d-\d\d',start) and start<datetime.now().date().isoformat():return None
+    return dict(id='board:'+hashlib.sha256(url.encode()).hexdigest()[:24],company=company or 'See advert',title=title,location=location or 'See advert',level=level,sector=sector(title+' '+description),salary=salary,deadline=deadline,start=start,university='See advert',duration='See advert',requirements='Check the original advert for entry requirements.',description=description or 'Published in '+source+'. Check the original advert for current availability.',url=url,live=not lead and not closed,discovery=lead,source=source,vacancyStatus='closed' if closed else 'listed')
 
 def parse_ucas(markup):
     tree=Tree(markup).root; out={}; seen=set(); full=tree.text()
@@ -267,34 +267,52 @@ def nationwide():
     result={};statuses=[]
     today=datetime.now(timezone.utc).date().isoformat()
     old_by_url={canonical(j['url']):j for records in old.values() if isinstance(records,list) for j in records if isinstance(j,dict) and j.get('url')}
+    # Historical records are kept for 365 days after they were last seen.
+    # A missing advert is not proof of closure, particularly on partial feeds.
     def retain(j):
         try:
             seen=datetime.fromisoformat(j.get('lastSeen') or j.get('firstSeen') or '').date()
-            return (not j.get('deadline') or j['deadline']>=today) and 0<=(datetime.now(timezone.utc).date()-seen).days<=14
+            return 0<=(datetime.now(timezone.utc).date()-seen).days<=365
         except (ValueError,TypeError):return False
+    def historical(j, complete):
+        closed=j.get('vacancyStatus')=='closed' or bool(j.get('deadline') and j['deadline']<today)
+        state='closed' if closed else 'not-listed' if complete or j.get('vacancyStatus')=='not-listed' else 'unknown'
+        return {**j,'cached':True,'live':False,'vacancyStatus':state}
     with ThreadPoolExecutor(max_workers=5) as ex:
         for f in [ex.submit(t) for t in tasks]:
             try:jobs,status=f.result()
             except Exception as e:jobs=[];status=dict(name='Unknown source',ok=False,message=str(e))
             name=status['name'];previous=old.get(name,[])
-            # Preserve missing records when a source was unavailable or only partially read.
-            merged={j['id']:{**j,'cached':True} for j in previous if retain(j)} if not status.get('ok') or status.get('partial') else {}
+            complete=bool(status.get('ok') and not status.get('partial'))
+            merged={j['id']:historical(j,complete) for j in previous if retain(j)}
             for j in jobs:
                 prev=old_by_url.get(canonical(j['url']),{})
-                if j.get('deadline') and j['deadline']<today:continue
-                merged[j['id']]={**j,'source':name,'cached':False,'posted':j.get('posted') or prev.get('posted',''),'firstSeen':prev.get('firstSeen') or today,'lastSeen':today}
+                closed=j.get('vacancyStatus')=='closed' or bool(j.get('deadline') and j['deadline']<today)
+                # A newly published record can reopen a previous listing.
+                merged[j['id']]={**j,'source':name,'cached':False,'live':bool(j.get('live') and not closed),'vacancyStatus':'closed' if closed else 'listed','posted':j.get('posted') or prev.get('posted',''),'firstSeen':prev.get('firstSeen') or today,'lastSeen':today,'previousDeadline':prev.get('deadline','') if prev.get('deadline')!=j.get('deadline') else prev.get('previousDeadline',''),'deadlineChanged':today if prev.get('deadline') and j.get('deadline') and prev['deadline']!=j['deadline'] else prev.get('deadlineChanged',''),'reopened':today if prev.get('vacancyStatus')=='closed' and not closed else prev.get('reopened','')}
             result[name]=list(merged.values());statuses.append(status)
+    # A removed source or an unexpected exception must not erase its history.
+    for name,records in old.items():
+        if name not in result and isinstance(records,list):
+            result[name]=[historical(j,False) for j in records if retain(j)]
     from direct_links import enrich
     count=enrich(result,old,fetch_html)
     print(f'Direct employer application links: {count}')
+    from discovery_feeds import discover
+    try:print('Remembered supported employer boards:',len(discover(j for records in result.values() for j in records)))
+    except (ValueError,OSError) as exc:print('Employer discovery incomplete:',type(exc).__name__)
     try:SOURCE_CACHE.write_text(json.dumps(result,ensure_ascii=False),encoding='utf-8')
     except OSError:pass
     best={}
     for records in result.values():
         for j in records:
-            if j.get('deadline') and j['deadline']<today:continue
             k=canonical(j['url'])
-            rank=lambda x:(bool(x.get('live') and not x.get('cached')),not x.get('discovery',False),not x.get('cached',False),bool(x.get('deadline')),bool(x.get('posted')))
+            if j.get('applyUrl'):
+                identity=lambda s:re.sub(r'[^a-z0-9]','',str(s or '').lower())
+                direct=canonical(j['applyUrl'])
+                # Some employers use the same application portal for multiple roles.
+                k='direct:'+direct+'|'+identity(j.get('company'))+'|'+identity(j.get('title'))+'|'+identity(j.get('location'))
+            rank=lambda x:(not x.get('cached',False),x.get('lastSeen',''),x.get('vacancyStatus')=='closed',bool(x.get('live')),not x.get('discovery',False),bool(x.get('deadline')),bool(x.get('posted')))
             if k not in best or rank(j)>rank(best[k]):best[k]=j
     jobs=sorted(best.values(),key=lambda j:(j.get('posted') or '',j.get('firstSeen') or ''),reverse=True)
     for status in statuses:

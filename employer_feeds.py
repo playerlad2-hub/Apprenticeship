@@ -12,7 +12,8 @@ ROOT = Path(__file__).parent
 TOKEN = re.compile(r'^[A-Za-z0-9_-]{1,100}$')
 APP = re.compile(r'\bapprentice(?:ship)?s?\b', re.I)
 BLOCK = re.compile(r'\b(?:weapons?|munitions?|missiles?|firearms?|explosives?|gambling|casino|sports betting|pornograph\w*)\b', re.I)
-CLOSED = re.compile(r'\b(?:register (?:your )?interest|talent community|applications (?:are |now )?closed|no longer accepting|coming soon)\b', re.I)
+NOT_VACANCY = re.compile(r'\b(?:register (?:your )?interest|talent community|coming soon)\b', re.I)
+CLOSED = re.compile(r'\b(?:applications (?:are |now )?closed|no longer accepting applications|vacancy (?:is )?closed)\b', re.I)
 UK = re.compile(r'\b(?:UK|GB|GBR|United Kingdom|England|Scotland|Wales|Northern Ireland|London|Manchester|Birmingham|Bristol|Leeds|Liverpool|Edinburgh|Glasgow|Cardiff|Belfast|Newport|Nottingham|Sheffield|Cambridge|Oxford|Reading|Southampton|Newcastle|York|Derby|Coventry|Wolverhampton|Telford|Stoke|Exeter|Plymouth|Aberdeen|Dundee|Swindon|Milton Keynes|Bath|Cheltenham|Gloucester|Peterborough|Portsmouth|Brighton|Bournemouth|Leicester|Ipswich|Norwich|Hull|Swansea|Lancaster|Preston|Warrington|Basingstoke|Guildford|Slough|St Albans|Stockport|Maidstone|Chester|Doncaster|Horsham|Stevenage|Blackpool|Huddersfield|Wrexham|UK-wide)\b', re.I)
 DEG = re.compile(r'\b(?:degree apprenticeship|degree apprentice|graduate apprenticeship|level\s*[67]|L[67]|SCQF\s*(?:10|11))\b', re.I)
 LOW = re.compile(r'\b(?:level\s*[2-5]|L[2-5])\b', re.I)
@@ -37,13 +38,12 @@ def request(url, xml=False):
 
 def normalized(f, ident, title, loc, url, description='', posted='', closing='', salary='', apply_url=''):
     title=text(title); loc=text(loc); desc=text(description); url=str(url or '')
-    if not ident or not APP.search(title) or BLOCK.search(title+' '+desc) or (CLOSED.search(title) or re.search(r'\b(?:applications (?:are |now )?closed|no longer accepting applications)\b',desc,re.I)):return None
+    if not ident or not APP.search(title) or BLOCK.search(title+' '+desc) or NOT_VACANCY.search(title):return None
     if re.search(r'\b(?:apprentice(?:ship)? (?:trainer|assessor|coordinator|manager|coach)|(?:trainer|assessor|coordinator|manager|coach) (?:for|of) apprentice)',title,re.I):return None
     if not UK.search(loc) or (re.search(r'\b(?:New York|United States|USA|Canada|Australia|India|Germany|France|Ireland|Singapore)\b',loc,re.I) and not re.search(r'\b(?:UK|GB|GBR|United Kingdom|England|Scotland|Wales|Northern Ireland)\b',loc,re.I)):return None
     p=urlparse(url)
     if p.scheme!='https' or not p.hostname:return None
     closing=date(closing)
-    if closing and closing<datetime.now(timezone.utc).date().isoformat():return None
     # An explicit lower level in the title must not be promoted to a degree vacancy.
     if LOW.search(title) and not DEG.search(title):return None
     if LOW.search(desc) and not DEG.search(title+' '+desc):return None
@@ -58,13 +58,13 @@ def normalized(f, ident, title, loc, url, description='', posted='', closing='',
         if m:
             try:closing=datetime.strptime(m[1],'%d %B %Y').date().isoformat()
             except ValueError:pass
-    if closing and closing<datetime.now(timezone.utc).date().isoformat():return None
+    closed=bool(CLOSED.search(title+' '+desc) or (closing and closing<datetime.now(timezone.utc).date().isoformat()))
     lev=re.search(r'\b(?:level\s*|L)([67])\b',title,re.I) or re.search(r'\b(?:level\s*|L)([67])\b',desc,re.I)
     level=lev[1] if lev else 'Degree' if DEG.search(title+' '+desc) else 'Unconfirmed'
     # Keep unconfirmed-level openings separate from confirmed degree-level adverts.
     from vacancy_search import sector
     from direct_links import direct_url
-    return dict(applyUrl=direct_url(apply_url) or direct_url(url),id='ats:'+f['type']+':'+f['slug'].lower()+':'+str(ident),company=f['name'],title=title,location=loc,level=level,sector=sector(title),salary=text(salary),posted=date(posted),deadline=closing,start=start,duration='',university='',requirements='Check the employer advert.',description='Published on the employer’s public careers feed. Check degree level, closing date and eligibility on the original listing.',url=url,live=True,discovery=level=='Unconfirmed',source=f['name']+' careers feed')
+    return dict(applyUrl=direct_url(apply_url) or direct_url(url),id='ats:'+f['type']+':'+f['slug'].lower()+':'+str(ident),company=f['name'],title=title,location=loc,level=level,sector=sector(title),salary=text(salary),posted=date(posted),deadline=closing,start=start,duration='',university='',requirements='Check the employer advert.',description='Published on the employer’s public careers feed. Check degree level, closing date and eligibility on the original listing.',url=url,live=not closed,vacancyStatus='closed' if closed else 'listed',discovery=level=='Unconfirmed',source=f['name']+' careers feed')
 
 def run_feed(f):
     kind=f['type']; slug=quote(f['slug'],safe=''); name=f['name']+' careers feed'; out=[]; partial=False
@@ -130,6 +130,10 @@ def run_feed(f):
 
 def registry():
     data=json.loads((ROOT/'employer_sources.json').read_text(encoding='utf-8'));out=[];seen=set()
+    try:
+        discovered=json.loads((ROOT/'discovered_boards.json').read_text(encoding='utf-8'))
+        if isinstance(discovered,list):data['feeds']+=discovered[:30]
+    except (OSError,ValueError,TypeError):pass
     allowed={'smart','greenhouse','greenhouse-eu','lever','lever-eu','ashby','personio','personio-de','recruitee-xml'}
     for f in data.get('feeds',[]):
         if f.get('type') not in allowed or not TOKEN.fullmatch(str(f.get('slug',''))) or not str(f.get('name','')).strip():continue

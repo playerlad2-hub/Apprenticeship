@@ -20,6 +20,46 @@ service cloud.firestore {
         && request.resource.data.revision.size() <= 80
         && request.resource.data.updatedAt == request.time;
     }
+    function verified() { return request.auth != null && request.auth.token.email_verified == true; }
+    function admin() { return verified() && exists(/databases/$(database)/documents/career_admins/$(request.auth.uid)); }
+    match /career_admins/{uid} {
+      allow get: if verified() && request.auth.uid == uid;
+      allow list, write: if false;
+    }
+    match /career_reports/{id} {
+      allow create: if verified() && id.matches(request.auth.uid + '_[A-Za-z0-9-]+')
+        && request.resource.data.keys().hasOnly(['uid','kind','title','body','url','status','createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.kind in ['Missing vacancy','Vacancy report']
+        && request.resource.data.title is string && request.resource.data.title.size() <= 180
+        && request.resource.data.body is string && request.resource.data.body.size() <= 1000
+        && request.resource.data.url is string && request.resource.data.url.size() <= 500
+        && request.resource.data.status == 'pending' && request.resource.data.createdAt == request.time;
+      allow read: if admin() || (request.auth != null && resource.data.uid == request.auth.uid);
+      allow update: if admin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']) && request.resource.data.status == 'resolved';
+      allow delete: if admin() || (request.auth != null && resource.data.uid == request.auth.uid);
+    }
+    match /career_alerts/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list: if false;
+      allow delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if verified() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['email','interests','locations','enabled','updatedAt'])
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.interests is string && request.resource.data.interests.size() <= 300
+        && request.resource.data.locations is string && request.resource.data.locations.size() <= 300
+        && request.resource.data.enabled == true && request.resource.data.updatedAt == request.time;
+    }
+    match /career_announcements/{id} {
+      allow get: if id == 'current';
+      allow list: if false;
+      allow create, update: if admin() && id == 'current'
+        && request.resource.data.keys().hasOnly(['title','body','updatedAt'])
+        && request.resource.data.title is string && request.resource.data.title.size() <= 100
+        && request.resource.data.body is string && request.resource.data.body.size() <= 600
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if admin();
+    }
     // No other collections are exposed by this project.
     match /{document=**} { allow read, write: if false; }
   }

@@ -27,8 +27,11 @@ jobs:
             vacancy_cache.json
             push_seen.json
             link_health_cache.json
+            discovered_boards.json
           key: vacancy-cache-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: vacancy-cache-
+      - name: Validate website code
+        run: python tests/check_release.py
       - name: Refresh public vacancy data
         run: python update_vacancies.py
       - name: Check supported application links
@@ -37,6 +40,8 @@ jobs:
       - name: Configure public feedback repository
         run: |
           python -c 'import json, os, pathlib; pathlib.Path("site/feedback-repo.js").write_text("window.CAREER_FEEDBACK_REPOSITORY = " + json.dumps(os.environ["GITHUB_REPOSITORY"]) + ";\n")'
+      - name: Generate public vacancy and employer pages
+        run: python generate_pages.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

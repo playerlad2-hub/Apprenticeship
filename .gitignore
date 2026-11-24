@@ -6,3 +6,5 @@ vacancy_cache.json
 push_seen.json
 link_health_cache.json
 *.pem
+discovered_boards.json
+*service-account*.json
