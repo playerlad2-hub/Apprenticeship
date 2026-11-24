@@ -1,3 +1,7 @@
+## Monzo donation update
+
+The supplied config.js includes the requested Monzo.me payment link. Confirm with Monzo that the link is suitable for public website donations before publishing. If you already have a configured Supabase account, preserve your deployed config.js and change only donationUrl to the value in the included config.js; otherwise the included config.js can replace your unconfigured file. Preserve site/vacancies.json. Sign-in still requires Supabase setup. No payment processing is performed by Career Hub.
+
 # Career Hub Next — degree-apprenticeship applicant workspace
 
 ## Upgrade an existing GitHub Pages installation

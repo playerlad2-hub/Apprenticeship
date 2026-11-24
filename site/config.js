@@ -6,5 +6,5 @@ window.CAREER_CONFIG = {
   githubSignIn: true, // enable corresponding OAuth provider in Supabase before use
   googleSignIn: false,
   emailSignIn: false, // requires a configured email service for general public sign-ups
-  donationUrl: '' // optional HTTPS hosted donation page; approved eligible account holder
+  donationUrl: 'https://monzo.me/aryanlad9?h=nnz2Li&account_type=personal' // optional HTTPS hosted donation page; approved eligible account holder
 };
