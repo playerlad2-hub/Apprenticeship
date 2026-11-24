@@ -1,0 +1,1 @@
+Replace site/cloud-account.js, site/workspace.js and site/sw.js. No Firebase rule changes. Automatic restore checks server first, merges on fresh or unchanged workspaces, and stops on conflicting local changes. Manual restore/save resolves conflicts. Test with two browser profiles before public deployment.
