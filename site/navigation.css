@@ -1,0 +1,15 @@
+/* Compact, grouped sidebar with consistent outline icons. */
+#root:not(.live) .hub-side{padding:22px 14px 14px;gap:19px!important;overflow:hidden!important}
+#root:not(.live) .hub-side .hub-brand{flex:none;padding:0 5px}
+#root:not(.live) .hub-side nav{display:flex;flex-direction:column;gap:14px;flex:1;min-height:0;overflow:auto;padding:1px 3px 12px 1px;scrollbar-width:thin;scrollbar-color:#c8d2df transparent}
+.career-nav-group{min-width:0;flex:none}
+.career-nav-label{font-size:10px;font-weight:750;letter-spacing:.095em;text-transform:uppercase;color:#66778c;padding:0 10px 6px;line-height:1.4}
+.career-nav-links{display:grid;gap:2px}
+#root:not(.live) .hub-side nav button,.career-more-nav button{display:flex;align-items:center;gap:10px;width:100%;min-height:37px;padding:8px 10px;text-align:left;font-size:13px;line-height:1.3;font-weight:550;border:0;border-radius:8px;color:#46596e;background:transparent;cursor:pointer}
+#root:not(.live) .hub-side nav button svg,.career-more-nav button svg{width:18px;height:18px;flex:none;color:#64758a}
+#root:not(.live) .hub-side nav button:hover,.career-more-nav button:hover{background:#f1f4f8}
+#root:not(.live) .hub-side nav button.current,.career-more-nav button.current{background:#e8effc;color:#194a9f;font-weight:700;box-shadow:inset 3px 0 #356bc5}
+#root:not(.live) .hub-side nav button.current svg,.career-more-nav button.current svg{color:#245ab6}
+#root:not(.live) .hub-side .side-bottom{flex:none;margin:0;padding:9px 10px 1px;border-top:1px solid #e3e8ef;font-size:10px;line-height:1.4}
+.career-more-nav{display:grid;gap:16px;padding:4px 0}
+@media(max-width:690px){#root .hub-mobile button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 4px;flex:1;white-space:nowrap}#root .hub-mobile button svg{width:19px;height:19px}.career-more-nav{max-height:65dvh;overflow:auto}}
