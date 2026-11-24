@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /career_backups/{uid} {
+      function owner() {
+        return request.auth != null && request.auth.uid == uid
+          && request.auth.token.email_verified == true;
+      }
+      allow get, delete: if owner();
+      allow list: if false;
+      allow create, update: if owner()
+        && request.resource.data.keys().hasAll(['payload','revision','updatedAt'])
+        && request.resource.data.keys().hasOnly(['payload','revision','updatedAt'])
+        && request.resource.data.payload is string
+        && request.resource.data.payload.size() <= 750000
+        && request.resource.data.revision is string
+        && request.resource.data.revision.size() <= 80
+        && request.resource.data.updatedAt == request.time;
+    }
+    // No other collections are exposed by this project.
+    match /{document=**} { allow read, write: if false; }
+  }
+}

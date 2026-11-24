@@ -4,7 +4,7 @@ const plusGet=(key,fallback)=>{try{return JSON.parse(localStorage.getItem('caree
 const plusSet=(key,value)=>{try{localStorage.setItem('career_plus_'+key,JSON.stringify(value));return true}catch{hToast('Storage unavailable. Keep a backup.');return false}};
 let tasks=plusGet('tasks',[]), evidence=plusGet('evidence',[]), checklist=plusGet('checklist',{}), savedSearches=plusGet('searches',[]), notificationPrefs=plusGet('prefs',{vacancies:true,deadlines:true,tasks:true,days:7,desktop:false}), seenVacancies=plusGet('seen',null), notices=plusGet('notices',[]);
 let accountClient=null, accountUser=null, accountError='', authBusy=false, authPromise=null;
-const readyAuth=()=>/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(plusConfig.supabaseUrl||'')&&typeof plusConfig.supabasePublishableKey==='string'&&/^(sb_publishable_|eyJ)/.test(plusConfig.supabasePublishableKey);
+const readyAuth=()=>false; // Legacy Supabase account integration disabled.
 const uid=()=>globalThis.crypto?.randomUUID?.()||Date.now().toString(36)+Math.random().toString(36).slice(2);
 const titleBlock=(title,desc,body)=>`<section class="plus-card"><h2>${escH(title)}</h2><p class="plus-muted">${escH(desc)}</p>${body}</section>`;
 const formField=(label,name,value='',type='text',required=false)=>hField(label,name,value,type,required);
