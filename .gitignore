@@ -1,0 +1,4 @@
+__pycache__/
+vacancy_cache.json
+.env
+*.secret
