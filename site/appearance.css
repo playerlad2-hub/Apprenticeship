@@ -1,0 +1,334 @@
+/* Career Hub appearance: one coherent dark theme; no changes to game stimuli or CV output. */
+.discover-dark {color-scheme:dark;--dark-bg:#101721;--dark-surface:#172230;--dark-raised:#202e40;--dark-border:#334358;--dark-text:#e7eef8;--dark-muted:#afbed0;--dark-accent:#a9caff;--explore-line:#334358;--explore-accent:#a9caff;--page-input:#1b2736;--plus-blue:#a9caff;--plus-border:#334358;--plus-muted:#afbed0;--plus-ink:#e7eef8}
+html.discover-dark,html.discover-dark body,html.discover-dark #root:not(.live),html.discover-dark #root:not(.live) .hub-layout,html.discover-dark #root:not(.live) .hub-main,html.discover-dark #root:not(.live) .hub-content{background:var(--dark-bg)!important;color:var(--dark-text)!important;scrollbar-color:#51637a #101721}
+.discover-dark #root:not(.live) .hub-side{background:#151f2c!important;border-color:var(--dark-border)!important}
+.discover-dark .hub-content,.discover-dark .hub-modal{color:var(--dark-text)}
+.discover-dark #root:not(.live) .layout.hub-layout{background:#172230!important}
+.discover-dark #root:not(.live) .hub-side{background:#172230!important;border-right:1px solid #334358!important}
+.discover-dark .hub-logo{background:#315b9b!important;color:#f1f5fb!important}
+.discover-dark .hub-brand small{color:#b2c0d2!important}
+.discover-dark .hub-side nav button,.discover-dark .hub-mobile button{color:#b2c0d2!important}
+.discover-dark .hub-side nav button:hover,.discover-dark .hub-mobile button:hover{background:#202e40!important}
+.discover-dark .hub-side nav button.current,.discover-dark .hub-mobile button.current{background:#202e40!important;color:#a9caff!important}
+.discover-dark .hub-side .side-bottom{color:#b2c0d2!important}
+.discover-dark .hub-main{scrollbar-color:#334358 transparent!important}
+.discover-dark .hub-topline{color:#b2c0d2!important}
+.discover-dark .hub-heading h1{color:#a9caff!important}
+.discover-dark .hub-heading p{color:#b2c0d2!important}
+.discover-dark .hub-btn,.discover-dark .hub-link{border:1px solid #334358!important;background:#172230!important;color:#a9caff!important}
+.discover-dark .hub-btn:hover,.discover-dark .hub-link:hover{background:#202e40!important;border-color:#5279b6!important}
+.discover-dark .hub-btn.main-btn,.discover-dark .hub-link.main-btn{background:#315b9b!important;border-color:#5279b6!important;color:#f1f5fb!important}
+.discover-dark .hub-btn.main-btn:hover,.discover-dark .hub-link.main-btn:hover{background:#315b9b!important}
+.discover-dark .hub-btn.danger{color:#ffb0b8!important}
+.discover-dark .hub-label{color:#b2c0d2!important}
+.discover-dark .hub-metric{background:#172230!important;border:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .hub-metric:hover{border-color:#5279b6!important}
+.discover-dark .hub-metric span{color:#b2c0d2!important}
+.discover-dark .hub-metric small{color:#b2c0d2!important}
+.discover-dark .hub-section-title a,.discover-dark .hub-textbtn{color:#a9caff!important}
+.discover-dark .hub-action{background:#172230!important;border:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .hub-action:hover{border-color:#5279b6!important;background:#172230!important}
+.discover-dark .hub-icon{background:#202e40!important;color:#a9caff!important}
+.discover-dark .hub-action p{color:#b2c0d2!important}
+.discover-dark .hub-action em{color:#a9caff!important}
+.discover-dark .hub-box{background:#172230!important;border:1px solid #334358!important}
+.discover-dark .hub-note{background:#202e40!important;border:1px solid #334358!important;color:#b2c0d2!important}
+.discover-dark .hub-note a{color:#a9caff!important}
+.discover-dark .hub-filter input,.discover-dark .hub-filter select,.discover-dark .hub-form input,.discover-dark .hub-form select,.discover-dark .hub-form textarea{color:#a9caff!important;background:#172230!important;border:1px solid #334358!important}
+.discover-dark .hub-filter input:focus,.discover-dark .hub-filter select:focus,.discover-dark .hub-form input:focus,.discover-dark .hub-form select:focus,.discover-dark .hub-form textarea:focus{outline:2px solid #5279b6!important}
+.discover-dark .hub-count{color:#b2c0d2!important}
+.discover-dark .hub-job{background:#172230!important;border:1px solid #334358!important}
+.discover-dark .company-mark{background:#202e40!important;color:#a9caff!important}
+.discover-dark .company-name{color:#b2c0d2!important}
+.discover-dark .hub-job h3{color:#a9caff!important}
+.discover-dark .hub-job p{color:#b2c0d2!important}
+.discover-dark .hub-job dt,.discover-dark .hub-detail-grid dt{color:#b2c0d2!important}
+.discover-dark .hub-job .job-bottom{border-top:1px solid #334358!important}
+.discover-dark .hub-badge{background:#202e40!important;color:#b2c0d2!important}
+.discover-dark .hub-badge.open,.discover-dark .hub-badge.offer{background:#20392f!important;color:#8be0b0!important}
+.discover-dark .hub-badge.soon{background:#392f20!important;color:#f4ce83!important}
+.discover-dark .hub-badge.closed,.discover-dark .hub-badge.rejected{background:#38262e!important;color:#ffb0b8!important}
+.discover-dark .hub-badge.applied{background:#202e40!important;color:#a9caff!important}
+.discover-dark .hub-badge.interview{background:#302a43!important;color:#d5b9ff!important}
+.discover-dark .hub-row{border-bottom:1px solid #334358!important}
+.discover-dark .hub-row small{color:#b2c0d2!important}
+.discover-dark .hub-table-wrap{background:#172230!important;border:1px solid #334358!important}
+.discover-dark .hub-table th{background:#172230!important;color:#b2c0d2!important;border-bottom:1px solid #334358!important}
+.discover-dark .hub-table td{border-bottom:1px solid #334358!important}
+.discover-dark .hub-table td small{color:#b2c0d2!important}
+.discover-dark .hub-empty{color:#b2c0d2!important}
+.discover-dark .hub-empty h3{color:#a9caff!important}
+.discover-dark .hub-tab{border:1px solid #334358!important;background:#172230!important;color:#b2c0d2!important}
+.discover-dark .hub-tab.active{background:#202e40!important;border-color:#334358!important;color:#a9caff!important}
+.discover-dark .hub-modal{border:1px solid #334358!important;color:#a9caff!important;background:#172230!important;box-shadow:0 18px 65px #00000030!important}
+.discover-dark .hub-modal-head{border-bottom:1px solid #334358!important}
+.discover-dark .hub-modal-head p{color:#b2c0d2!important}
+.discover-dark .hub-toast{background:#25436c!important;color:#f1f5fb!important;box-shadow:0 6px 20px #00000030!important}
+.discover-dark .hub-footer{color:#b2c0d2!important}
+.discover-dark .simple-game{background:#172230!important;border:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .simple-game:hover{border-color:#5279b6!important;background:#172230!important}
+.discover-dark .simple-game p{color:#b2c0d2!important}
+.discover-dark .simple-game small{color:#b2c0d2!important}
+.discover-dark .hub-main .introbar,.discover-dark .hub-main .eyebrow{color:#b2c0d2!important}
+.discover-dark .hub-main .introbar b{color:#a9caff!important}
+.discover-dark .hub-main .chip,.discover-dark .hub-main .iconbtn{color:#b2c0d2!important;background:#172230!important;border:1px solid #334358!important}
+.discover-dark .hub-main .chip.active{background:#202e40!important;color:#a9caff!important;border-color:#334358!important}
+.discover-dark #root:not(.live) .hub-main .tutorial-heading h1,.discover-dark #root:not(.live) .hub-main .section-head h2{color:#a9caff!important}
+.discover-dark #root:not(.live) .hub-main .tutorial-heading p,.discover-dark #root:not(.live) .hub-main .section-head p,.discover-dark #root:not(.live) .hub-main .ftr,.discover-dark #root:not(.live) .hub-main .muted{color:#b2c0d2!important}
+.discover-dark #root:not(.live) .hub-main .tutorial-card,.discover-dark #root:not(.live) .hub-main .inner-panel,.discover-dark #root:not(.live) .hub-main .results-hero{background:#172230!important;color:#a9caff!important;border:1px solid #334358!important}
+.discover-dark #root:not(.live) .hub-main .tutorial-copy,.discover-dark #root:not(.live) .hub-main .tutorial-copy p{color:#a9caff!important}
+.discover-dark #root:not(.live) .hub-main .tipbox{background:#202e40!important;color:#a9caff!important;border-color:#334358!important}
+.discover-dark #root:not(.live) .hub-main .tutorial-visual{background:#202e40!important;border-color:#334358!important}
+.discover-dark #root:not(.live) .hub-main .tutorial-preview-art{background:#202e40!important;border-color:#334358!important}
+.discover-dark #root:not(.live) .hub-main .primary-btn{background:#315b9b!important;color:#f1f5fb!important;border:1px solid #5279b6!important}
+.discover-dark #root:not(.live) .hub-main .secondary-btn,.discover-dark #root:not(.live) .hub-main .demo-btn{background:#172230!important;color:#a9caff!important;border:1px solid #334358!important}
+.discover-dark #root:not(.live) .hub-main .demo-result{color:#8be0b0!important}
+.discover-dark #root:not(.live) .hub-main .step-dot{background:#202e40!important}
+.discover-dark #root:not(.live) .hub-main .step-dot.on{background:#315b9b!important}
+.discover-dark #root:not(.live) .hub-main .result-stat{background:#172230!important;color:#a9caff!important;border-color:#334358!important}
+.discover-dark #root:not(.live) .hub-main .result-stat span,.discover-dark #root:not(.live) .hub-main .minitag,.discover-dark #root:not(.live) .hub-main .trend-bar span{color:#b2c0d2!important}
+.discover-dark #root:not(.live) .hub-main .result-score{color:#a9caff!important}
+.discover-dark #root:not(.live) .hub-main .result-check{background:#20392f!important;color:#8be0b0!important}
+.discover-dark #root:not(.live) .hub-main .trend-bar{background:#315b9b!important}
+@media (max-width:690px){
+.discover-dark .hub-mobile{background:#172230!important;border-top:1px solid #334358!important}
+}
+.discover-dark #root:not(.live) .hub-brand b,.discover-dark #root:not(.live) .hub-section-title h2,.discover-dark #root:not(.live) .hub-job dd,.discover-dark #root:not(.live) .hub-row b,.discover-dark #root:not(.live) .hub-table b,.discover-dark #root:not(.live) .hub-main .tutorial-copy h2,.discover-dark #root:not(.live) .hub-main .inner-panel h3,.discover-dark #root:not(.live) .hub-main .results-hero h1{color:#a9caff!important}
+.discover-dark .hub-modal h2,.discover-dark .hub-modal h3,.discover-dark .hub-modal dd{color:#a9caff!important}
+.discover-dark .hub-main .simple-game b{color:#a9caff!important}
+.discover-dark .hub-main .hub-empty h3{color:#a9caff!important}
+.discover-dark .hub-source{border:1px solid #334358!important;background:#172230!important}
+.discover-dark .hub-source small{color:#b2c0d2!important}
+.discover-dark .hub-side{border-right:1px solid #334358!important}
+.discover-dark .hub-job{border:1px solid #334358!important;box-shadow:0 2px 6px #00000030!important}
+.discover-dark .hub-job .hide-job{color:#b2c0d2!important}
+.discover-dark .pro-filterbar label{color:#b2c0d2!important}
+.discover-dark .provider-heading h2{color:#a9caff!important}
+.discover-dark .provider-heading p{color:#b2c0d2!important}
+.discover-dark .provider-initial{background:#202e40!important;color:#a9caff!important}
+.discover-dark .provider-group .simple-game:hover{border-color:#5279b6!important;box-shadow:0 5px 18px #00000030!important}
+.discover-dark .provider-group .simple-game small{color:#b2c0d2!important}
+.discover-dark .pro-note{color:#b2c0d2!important;background:#202e40!important;border:1px solid #334358!important}
+.discover-dark .pro-question{background:#172230!important;color:#a9caff!important;border:1px solid #334358!important}
+.discover-dark .pro-prompt{color:#a9caff!important}
+.discover-dark .pro-choices button{background:#172230!important;border:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .pro-choices button:hover{border-color:#5279b6!important;background:#172230!important}
+.discover-dark .pro-choices i{background:#202e40!important;color:#a9caff!important}
+.discover-dark .pro-explain{background:#202e40!important;border:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .pro-practice .subheading{color:#a9caff!important}
+.discover-dark .pro-choices button.good{background:#20392f!important;border-color:#334358!important}
+.discover-dark .pro-choices button:focus-visible,.discover-dark .hub-btn:focus-visible{outline:3px solid #5279b6!important}
+.discover-dark .direction-demo-grid{color:#a9caff!important}
+.discover-dark .hub-layout .hub-side{background:#172230!important;border-right:1px solid #334358!important}
+.discover-dark .hub-layout .hub-main{background:#172230!important}
+.discover-dark .plus-count{background:#202e40!important;color:#a9caff!important}
+.discover-dark .plus-welcome{border:1px solid #334358!important;background:linear-gradient(115deg,#202e40,#172230)!important}
+.discover-dark .plus-tiles button{background:#172230!important}
+.discover-dark .plus-tiles button:hover{border-color:#5279b6!important}
+.discover-dark .plus-card{background:#172230!important}
+.discover-dark .plus-list-row{border-top:1px solid #334358!important}
+.discover-dark .plus-unread{background:#172230!important}
+.discover-dark .plus-empty{background:#172230!important}
+.discover-dark .plus-date{background:#202e40!important;color:#a9caff!important}
+.discover-dark .plus-tick{border:1px solid #334358!important;background:#172230!important;color:#b2c0d2!important}
+.discover-dark .plus-tick.checked{background:#20392f!important;color:#8be0b0!important;border-color:#477b66!important}
+.discover-dark .plus-strike b{color:#b2c0d2!important}
+.discover-dark .plus-question{background:#202e40!important}
+.discover-dark .plus-resource{color:#a9caff!important;border-bottom:1px solid #334358!important}
+.discover-dark .plus-searchbar{background:#172230!important}
+.discover-dark .provider-group .simple-games .simple-game:hover{border-color:#5279b6!important;box-shadow:0 3px 10px #00000030!important}
+.discover-dark .hub-side nav button:focus-visible,.discover-dark .hub-btn:focus-visible,.discover-dark .plus-tiles button:focus-visible{outline:3px solid #5279b6!important}
+.discover-dark .ext-search{background:#172230!important;border:1px solid #334358!important}
+.discover-dark .ext-search label{color:#b2c0d2!important}
+.discover-dark .ext-search input{background:#172230!important;border:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .ext-search span{color:#b2c0d2!important}
+.discover-dark .ext-question-label{color:#b2c0d2!important}
+.discover-dark .ext-practice .pro-question{background:#172230!important;border:1px solid #334358!important}
+.discover-dark #root:not(.live) .hub-content{color:#a9caff!important}
+.discover-dark #root:not(.live) .plus-welcome h2,.discover-dark #root:not(.live) .plus-card h2,.discover-dark #root:not(.live) .hub-box h2,.discover-dark #root:not(.live) .hub-box h3,.discover-dark #root:not(.live) .hub-box b,.discover-dark #root:not(.live) .provider-heading h2,.discover-dark #root:not(.live) .plus-question,.discover-dark #root:not(.live) .plus-section-head h2{color:#a9caff!important}
+.discover-dark #root:not(.live) .plus-card .hub-form label{color:#a9caff!important}
+.discover-dark #root:not(.live) .plus-card hr{border-top:1px solid #334358!important}
+.discover-dark #root:not(.live) .hub-main{background:#172230!important}
+.discover-dark #root:not(.live) .hub-side{background:#172230!important;border-right:1px solid #334358!important}
+.discover-dark #root:not(.live) .hub-heading h1{color:#a9caff!important}
+.discover-dark #root:not(.live) .hub-job,.discover-dark #root:not(.live) .plus-card,.discover-dark #root:not(.live) .hub-box{border:1px solid #334358!important;box-shadow:0 2px 5px #00000030!important}
+.discover-dark #root:not(.live) .hub-btn:focus-visible,.discover-dark #root:not(.live) a:focus-visible,.discover-dark #root:not(.live) input:focus-visible,.discover-dark #root:not(.live) select:focus-visible,.discover-dark #root:not(.live) button:focus-visible{outline:3px solid #5279b6!important}
+.discover-dark .next-section-head h2{color:#a9caff!important}
+.discover-dark .next-section-head p{color:#b2c0d2!important}
+.discover-dark .next-shortcuts button{background:#172230!important;border:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .next-shortcuts button:hover{border-color:#5279b6!important;box-shadow:0 3px 10px #00000030!important}
+.discover-dark .next-shortcuts span,.discover-dark .next-shortcuts small{color:#b2c0d2!important}
+.discover-dark .next-shortcuts small{color:#a9caff!important}
+.discover-dark .next-grid .plus-card h3,.discover-dark .next-coverage-stats h3{color:#a9caff!important}
+.discover-dark .next-stat{background:#202e40!important;border:1px solid #334358!important}
+.discover-dark .next-stat strong{color:#a9caff!important}
+.discover-dark .next-stat span,.discover-dark .next-substat{color:#b2c0d2!important}
+.discover-dark .next-label,.discover-dark .next-filter-fields label{color:#a9caff!important}
+.discover-dark .next-label input,.discover-dark .next-filter input:not([type=checkbox]),.discover-dark .next-filter select{background:#172230!important;color:#a9caff!important;border:1px solid #334358!important}
+.discover-dark .next-note{background:#202e40!important;color:#a9caff!important}
+.discover-dark .next-cv{background:#172230!important;color:#a9caff!important;border:1px solid #334358!important}
+.discover-dark .next-row{border-bottom:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .next-row small{color:#b2c0d2!important}
+.discover-dark .next-row a,.discover-dark .next-links a{color:#a9caff!important}
+.discover-dark .next-step>span{background:#202e40!important;color:#a9caff!important}
+.discover-dark .next-step p{color:#b2c0d2!important}
+.discover-dark .next-work-progress{color:#a9caff!important}
+.discover-dark .next-coverage-stats>div{border:1px solid #334358!important;background:#172230!important}
+.discover-dark .next-coverage-stats small{color:#b2c0d2!important}
+.discover-dark .next-coverage-stats strong{color:#a9caff!important}
+.discover-dark .next-links a{border:1px solid #334358!important;background:#172230!important}
+.discover-dark .next-filter{background:#172230!important;border:1px solid #334358!important}
+.discover-dark .next-filter small,.discover-dark .next-filter .plus-top-actions label{color:#b2c0d2!important}
+.discover-dark .hourly-toolbar{border:1px solid #334358!important;background:#172230!important}
+.discover-dark .hourly-indicator{background:#28394d!important}
+.discover-dark .hourly-indicator.fresh{background:#28654d!important}
+.discover-dark .hourly-meta small{color:#b2c0d2!important}
+.discover-dark .hourly-extra summary{color:#e5edf7!important}
+.discover-dark .account-avatar,.discover-dark .account-symbol{background:#202e40!important;color:#a9caff!important}
+.discover-dark .support-symbol{background:#38262e!important;color:#ffb0b8!important}
+.discover-dark .account-state{color:#8be0b0!important}
+.discover-dark .account-detail{color:#b2c0d2!important}
+.discover-dark .account-details summary{color:#a9caff!important}
+.discover-dark .account-message{color:#b2c0d2!important}
+.discover-dark .focus-home-intro{border:1px solid #334358!important;background:#202e40!important}
+.discover-dark .focus-home-intro h2{color:#a9caff!important}
+.discover-dark .focus-home-intro p{color:#b2c0d2!important}
+.discover-dark .focus-eyebrow{color:#b2c0d2!important}
+.discover-dark .focus-shortcuts button{background:#172230!important;border:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .focus-shortcuts button:hover{border-color:#334358!important;background:#172230!important}
+.discover-dark .focus-shortcuts svg{color:#a9caff!important}
+.discover-dark .focus-shortcuts button span:last-child{color:#b2c0d2!important}
+.discover-dark .focus-statgrid>div{border:1px solid #334358!important;background:#172230!important}
+.discover-dark .focus-statgrid span{color:#b2c0d2!important}
+.discover-dark .focus-statgrid strong{color:#a9caff!important}
+.discover-dark .focus-action-row{border-bottom:1px solid #334358!important;color:#e5edf7!important}
+.discover-dark .focus-skill{border:1px solid #334358!important}
+.discover-dark .focus-skill small{color:#b2c0d2!important}
+.discover-dark .focus-reflection{border-bottom:1px solid #334358!important}
+.discover-dark .focus-reflection small{color:#b2c0d2!important}
+.discover-dark .focus-template{border:1px solid #334358!important;background:#172230!important;color:#a9caff!important}
+.discover-dark .journey-sectionhead h2,.discover-dark .journey-sectionhead h3{color:#a9caff!important}
+.discover-dark .journey-sectionhead p{color:#b2c0d2!important}
+.discover-dark .journey-lane{background:#202e40!important;border:1px solid #334358!important}
+.discover-dark .journey-lane h3{color:#a9caff!important}
+.discover-dark .journey-lane h3 span{background:#202e40!important}
+.discover-dark .journey-app{background:#172230!important;border:1px solid #334358!important}
+.discover-dark .journey-app p{color:#b2c0d2!important}
+.discover-dark .journey-app small,.discover-dark .journey-plan small,.discover-dark .journey-session small{color:#b2c0d2!important}
+.discover-dark .journey-app label{color:#b2c0d2!important}
+.discover-dark .journey-app select{background:#172230!important;border:1px solid #334358!important;color:#a9caff!important}
+.discover-dark .journey-empty{color:#b2c0d2!important}
+.discover-dark .journey-weekday{color:#b2c0d2!important}
+.discover-dark .journey-day{background:#172230!important;color:#a9caff!important;border:1px solid #334358!important}
+.discover-dark .journey-day:hover,.discover-dark .journey-day.selected{border-color:#5279b6!important;background:#202e40!important}
+.discover-dark .journey-day.today strong{color:#a9caff!important}
+.discover-dark .journey-day span{background:#202e40!important;color:#a9caff!important}
+.discover-dark .journey-plan{border:1px solid #334358!important}
+.discover-dark .journey-session{border-bottom:1px solid #334358!important}
+.discover-dark .journey-tag{color:#a9caff!important}
+.discover-dark .journey-clock{color:#a9caff!important}
+.discover-dark .journey-history{border-bottom:1px solid #334358!important}
+.discover-dark .journey-offer{border:1px solid #334358!important}
+.discover-dark .journey-total{color:#a9caff!important}
+.discover-dark .journey-day:focus-visible,.discover-dark .journey-stage:focus-visible{outline:2px solid #5279b6!important}
+.discover-dark .studio-item h3,.discover-dark .studio-contact h3{color:#a9caff!important}
+.discover-dark .studio-label{color:#b2c0d2!important}
+.discover-dark .studio-preview{color:#b2c0d2!important}
+.discover-dark .studio-meta{color:#b2c0d2!important}
+.discover-dark .studio-search input,.discover-dark .studio-search select{background:#172230!important;color:#a9caff!important;border:1px solid #334358!important}
+.discover-dark .studio-tip{background:#202e40!important;border:1px solid #334358!important;color:#b2c0d2!important}
+.discover-dark .studio-count{color:#b2c0d2!important}
+.discover-dark .studio-over{color:#ffb0b8!important}
+.discover-dark .studio-revision{border-top:1px solid #334358!important}
+.discover-dark .studio-track{background:#202e40!important}
+.discover-dark .studio-track>div{background:#315b9b!important}
+.discover-dark .studio-column{background:#202e40!important}
+.discover-dark .studio-column i{background:#315b9b!important}
+.discover-dark .studio-chart small{color:#b2c0d2!important}
+.discover-dark .hub-btn:focus-visible,.discover-dark .hub-tab:focus-visible,.discover-dark .hub-side button:focus-visible,.discover-dark .studio-search input:focus-visible,.discover-dark .studio-search select:focus-visible{outline:2px solid #5279b6!important}
+.discover-dark #root:not(.live) .hub-side nav{scrollbar-color:#334358 transparent!important}
+.discover-dark .career-nav-label{color:#b2c0d2!important}
+.discover-dark #root:not(.live) .hub-side nav button,.discover-dark .career-more-nav button{color:#b2c0d2!important}
+.discover-dark #root:not(.live) .hub-side nav button svg,.discover-dark .career-more-nav button svg{color:#b2c0d2!important}
+.discover-dark #root:not(.live) .hub-side nav button:hover,.discover-dark .career-more-nav button:hover{background:#202e40!important}
+.discover-dark #root:not(.live) .hub-side nav button.current,.discover-dark .career-more-nav button.current{background:#202e40!important;color:#a9caff!important;box-shadow:inset 3px 0 #00000030!important}
+.discover-dark #root:not(.live) .hub-side nav button.current svg,.discover-dark .career-more-nav button.current svg{color:#a9caff!important}
+.discover-dark #root:not(.live) .hub-side .side-bottom{border-top:1px solid #334358!important}
+.discover-dark .cv-toolbar p{color:#b2c0d2!important}
+.discover-dark .cv-eyebrow{color:#b2c0d2!important}
+.discover-dark .cv-toolbar-actions [role=status]{color:#b2c0d2!important}
+.discover-dark .cv-template{background:#172230!important;border:1px solid #334358!important;color:#e5edf7!important}
+.discover-dark .cv-template.selected{border-color:#5279b6!important;box-shadow:inset 0 0 0 1px #00000030!important;background:#202e40!important}
+.discover-dark .cv-template small{color:#b2c0d2!important}
+.discover-dark .cv-colours{color:#b2c0d2!important}
+.discover-dark .cv-step>span{color:#a9caff!important;background:#202e40!important}
+.discover-dark .cv-step p{color:#b2c0d2!important}
+.discover-dark .cv-order button{border:1px solid #334358!important;background:#172230!important;color:#a9caff!important}
+.discover-dark .cv-label{color:#b2c0d2!important}
+.discover-dark .cv-label input,.discover-dark .cv-label textarea{border:1px solid #334358!important;background:#172230!important;color:#a9caff!important}
+.discover-dark .cv-preview-title small,.discover-dark .cv-preview-title>span{color:#b2c0d2!important}
+.discover-dark .cv-progress{background:#202e40!important}
+.discover-dark .cv-progress i{background:#315b9b!important}
+.discover-dark .cv-preview-meta p,.discover-dark .cv-footnote{color:#b2c0d2!important}
+.discover-dark .discover-toolbar input,.discover-dark .discover-toolbar select{background:var(--page-input,#172230)!important}
+.discover-dark .discover-label{color:#b2c0d2!important}
+.discover-dark .discover-meta small{color:#b2c0d2!important}
+.discover-dark .discover-meter{background:#202e40!important}
+.discover-dark .discover-meter i{background:#315b9b!important}
+.discover-dark .discover-play-support{background:#172230!important;color:#e5edf7!important;border:1px solid #334358!important}
+.discover-dark .discover-support-footer{color:#b2c0d2!important}
+.discover-dark .discover-banner{border:1px solid #334358!important;background:#172230!important}
+.discover-dark .dx-cal-day.today{border-color:#5279b6!important}
+.discover-dark .dx-cal-day small{background:#202e40!important;color:#a9caff!important}
+/* Explicit semantic refinements, including high-specificity legacy rules. */
+.discover-dark #root:not(.live) .hub-main,.discover-dark #root:not(.live) .hub-content{background:#101721!important;color:#e7eef8!important}
+.discover-dark #root:not(.live) .hub-side nav button,.discover-dark .career-more-nav button,.discover-dark .hub-mobile button{background:transparent!important;color:#bac8da!important}
+.discover-dark #root:not(.live) .hub-side nav button svg,.discover-dark .career-more-nav button svg,.discover-dark .hub-mobile svg{color:#a1b3c9!important}
+.discover-dark #root:not(.live) .hub-side nav button:hover,.discover-dark .career-more-nav button:hover,.discover-dark .hub-mobile button:hover{background:#202d3d!important}
+.discover-dark #root:not(.live) .hub-side nav button.current,.discover-dark .career-more-nav button.current,.discover-dark .hub-mobile button.current{background:#243a59!important;color:#c1d8ff!important;box-shadow:inset 3px 0 #82a9eb!important}
+.discover-dark #root:not(.live) .hub-side nav button.current svg,.discover-dark .career-more-nav button.current svg{color:#b6d1ff!important}
+.discover-dark #root:not(.live) .hub-brand b,.discover-dark #root:not(.live) .hub-heading h1,.discover-dark #root:not(.live) .hub-section-title h2,.discover-dark #root:not(.live) .hub-job dd,.discover-dark #root:not(.live) .hub-row b,.discover-dark #root:not(.live) .hub-table b,.discover-dark .hub-main .simple-game b,.discover-dark .hub-modal h2,.discover-dark .hub-modal h3,.discover-dark .hub-modal dd{color:#e7eef8!important}
+.discover-dark .hub-metric,.discover-dark .focus-shortcuts button,.discover-dark .focus-home-intro,.discover-dark .focus-statgrid>div,.discover-dark .hub-action,.discover-dark .hub-job,.discover-dark .discover-banner,.discover-dark .plus-card,.discover-dark .hub-box,.discover-dark .hub-modal,.discover-dark .hub-table-wrap{background:#172230!important;color:#e7eef8!important;border-color:#334358!important;box-shadow:none!important}
+.discover-dark .focus-home-intro{background:linear-gradient(115deg,#1b2d45,#172230)!important}
+.discover-dark .hub-metric strong,.discover-dark .focus-statgrid strong,.discover-dark .focus-home-intro h2,.discover-dark .focus-shortcuts button b{color:#e7eef8!important}
+.discover-dark .focus-eyebrow,.discover-dark .focus-shortcuts svg,.discover-dark .hub-icon{color:#a9caff!important}
+.discover-dark .focus-home-intro p,.discover-dark .hub-metric span,.discover-dark .hub-metric small,.discover-dark .hub-topline,.discover-dark .hub-footer,.discover-dark .discover-support-footer,.discover-dark .discover-meta small,.discover-dark .discover-label{color:#afbed0!important}
+.discover-dark .hub-btn,.discover-dark .hub-link,.discover-dark .hub-tab{background:#202e40!important;color:#e7eef8!important;border-color:#3a4d64!important;box-shadow:none!important}
+.discover-dark .hub-btn:hover,.discover-dark .hub-link:hover,.discover-dark .hub-tab:hover,.discover-dark .focus-shortcuts button:hover,.discover-dark .hub-metric:hover,.discover-dark .hub-action:hover{background:#293b52!important;border-color:#6686b4!important}
+.discover-dark .hub-btn.main-btn,.discover-dark .hub-link.main-btn,.discover-dark .hub-tab.active{background:#315b9b!important;color:#fff!important;border-color:#5279b6!important}
+.discover-dark .hub-btn.main-btn:hover,.discover-dark .hub-link.main-btn:hover{background:#3c6bb3!important}
+.discover-dark .hub-btn.danger{color:#ffb0b8!important}
+.discover-dark .hub-content input:not([type=checkbox]):not([type=radio]):not([type=color]),.discover-dark .hub-content select,.discover-dark .hub-content textarea,.discover-dark .hub-modal input:not([type=checkbox]):not([type=radio]):not([type=color]),.discover-dark .hub-modal select,.discover-dark .hub-modal textarea{background:#1b2736!important;color:#e7eef8!important;border-color:#40536b!important}
+.discover-dark .hub-content input::placeholder,.discover-dark .hub-content textarea::placeholder,.discover-dark .hub-modal input::placeholder,.discover-dark .hub-modal textarea::placeholder{color:#a1b1c6!important;opacity:1}
+.discover-dark .hub-content input[type=checkbox],.discover-dark .hub-content input[type=radio],.discover-dark .hub-modal input[type=checkbox],.discover-dark .hub-modal input[type=radio]{accent-color:#8bb8ff}
+.discover-dark .hub-content a:not(.hub-link):not(.hub-btn),.discover-dark .hub-modal a:not(.hub-link):not(.hub-btn){color:#a9caff}
+.discover-dark .hub-content [style*="color:#63748a"],.discover-dark .hub-content [style*="color:#52657d"],.discover-dark .hub-content [style*="color:#52647b"]{color:#afbed0!important}
+.discover-dark .hub-badge{background:#28394d!important;color:#c5d5ea!important}
+.discover-dark .hub-badge.open,.discover-dark .hub-badge.offer{background:#20392f!important;color:#a0e4bc!important}
+.discover-dark .hub-badge.soon{background:#392f20!important;color:#f4ce83!important}
+.discover-dark .hub-badge.closed,.discover-dark .hub-badge.rejected{background:#38262e!important;color:#ffb0b8!important}
+.discover-dark .hub-badge.applied{background:#243a59!important;color:#c1d8ff!important}
+.discover-dark .hub-badge.interview{background:#302a43!important;color:#d5b9ff!important}
+.discover-dark .hub-modal::backdrop{background:#060b13bf!important}
+.discover-dark .hub-toast{background:#24354a!important;color:#f1f5fb!important;border:1px solid #526983}
+.discover-dark :is(.hub-content,.hub-side,.hub-modal,.hub-mobile) :focus-visible{outline:2px solid #a9caff!important;outline-offset:3px}
+/* Keep printed CV as paper; darken only the editor surrounding it. */
+.discover-dark .cv-paper-stage{background:#0e1622!important;border-color:#334358!important}
+.discover-dark .cv-paper{background:white!important;color:#252d38!important;color-scheme:light}
+.discover-dark .cv-paper p,.discover-dark .cv-paper li,.discover-dark .cv-paper small{color:inherit!important}
+.discover-dark .cv-paper .cv-paper-contact{color:#58616e!important}
+/* Play environments retain original task contrasts, with a matching surrounding UI. */
+.discover-dark #root.live .focus-hud{background:#172230!important;color:#e7eef8!important;border-color:#334358!important;color-scheme:dark}
+.discover-dark #root.live .focus-hud :is(.focus-name,.focus-meta,.focus-progress-top,.focus-score,.focus-progress-top b,.focus-score b){color:#d5e2f3!important}
+.discover-dark #root.live .focus-hud :is(.focus-btn,.focus-stage){background:#24354a!important;color:#e7eef8!important;border-color:#40536b!important}
+.discover-dark #root.live .game-arena{color-scheme:light}
+.discover-dark #root.live .discover-play-support{background:#172230!important;color:#e7eef8!important;border-color:#40536b!important}
+/* List updates should never cause browser scroll anchoring to jump to another card. */
+#h-vacancies{overflow-anchor:none}
+#h-vacancies .hub-job.vacancy-leaving{pointer-events:none;will-change:opacity,transform}
+@media(prefers-reduced-motion:reduce){#h-vacancies .hub-job{animation:none!important;transition:none!important}}
+/* The workspace should not have a lighter strip around narrow page content. */
+.discover-dark #root:not(.live) .layout.hub-layout{background:#101721!important}
+.discover-dark #root:not(.live) .hub-side{background:#151f2c!important}
+.discover-dark .hourly-indicator{background:#8090a4!important}
+.discover-dark .hourly-indicator.fresh{background:#73ce9c!important}

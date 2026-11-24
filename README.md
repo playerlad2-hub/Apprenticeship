@@ -1,3 +1,13 @@
+# Dark mode and in-place vacancy hiding update
+
+- Replaces incomplete dark-mode overrides with a coherent high-contrast workspace theme, including dashboard, sidebar, vacancies, forms, dialogs and tools. Printed CVs retain white paper and assessment stimuli retain their intended contrast.
+- Hide/Unhide animates the selected card out, reflows the list and preserves the current page, filters and scroll position. Respects reduced-motion settings. Hidden preferences continue using the existing local storage and backup structure.
+- Updates the offline app-shell cache version to avoid stale styles.
+
+To update, back up your private data, copy the ZIP contents into the existing repository while retaining `site/config.js`, `site/vacancies.json` and any custom employer configuration. Commit, push and refresh after the GitHub deployment. No account, donation or search changes are required.
+
+Tested in isolated Chromium desktop and mobile sessions with sample vacancies, including hide/unhide, exact scroll retention, theme switching and reduced-motion settings. Live services and installation were not retested.
+
 # Public vacancy interface update
 
 Removed the legacy search coverage screen, source list and management UI. The vacancy page retains only its compact refresh and freshness indicator. Hourly collection, direct application URLs, existing account settings and vacancy data remain unchanged. Frontend asset versions were updated to prevent stale scripts.
