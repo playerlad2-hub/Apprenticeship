@@ -1,5 +1,5 @@
 /* Versioned offline app shell, never cache authentication, API requests or private user data. */
-const CACHE='career-hub-cloud-v1';
+const CACHE='career-hub-cloud-v2-email';
 const SHELL=['./','./index.html','./config.js','./plus.js','./extended.js','./next.js','./focus.js','./journey.js','./studio.js','./navigation.js','./cv-builder.js','./discovery.js','./plus.css','./next.css','./focus.css','./journey.css','./studio.css','./navigation.css','./cv-builder.css','./discovery.css','./appearance.css','./vacancy-motion.js','./feedback-config.js','./feedback-repo.js','./feedback.js','./cloud-config.js','./cloud-account.js','./cloud-account.css','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>e.waitUntil((async()=>{const c=await caches.open(CACHE);await Promise.allSettled(SHELL.map(path=>c.add(new Request(path,{cache:'reload'}))));await self.skipWaiting()})()));
 self.addEventListener('activate',e=>e.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('career-hub-')&&key!==CACHE)await caches.delete(key);await self.clients.claim()})()));

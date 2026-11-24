@@ -3,12 +3,15 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /career_backups/{uid} {
       function owner() {
-        return request.auth != null && request.auth.uid == uid
-          && request.auth.token.email_verified == true;
+        return request.auth != null && request.auth.uid == uid;
       }
-      allow get, delete: if owner();
+      function verifiedOwner() {
+        return owner() && request.auth.token.email_verified == true;
+      }
+      allow get: if verifiedOwner();
+      allow delete: if owner();
       allow list: if false;
-      allow create, update: if owner()
+      allow create, update: if verifiedOwner()
         && request.resource.data.keys().hasAll(['payload','revision','updatedAt'])
         && request.resource.data.keys().hasOnly(['payload','revision','updatedAt'])
         && request.resource.data.payload is string
