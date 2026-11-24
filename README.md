@@ -1,13 +1,20 @@
-# Career Hub — daily updates
+# Career Hub — provider-organised practice and daily vacancy updates
 
-1. Export your personal tracker from the old site. Do not upload the export to GitHub.
-2. Create an empty public GitHub repository called `career-hub` with default branch `main`. Clone using GitHub Desktop, then copy all contents of this package (including `.github` and `.gitignore`) into the clone. Commit and push.
-3. In GitHub repository Settings > Pages > Build and deployment > Source, select GitHub Actions.
-4. In Actions, select Daily vacancy search and publish > Run workflow > main > Run workflow. After deployment, open the link in Settings > Pages.
-5. Import your tracker backup locally into the new website.
+## Upgrade an existing GitHub Pages installation
+1. On the existing website, export your personal tracker as a backup. Keep this file private; do not commit it to GitHub.
+2. In GitHub Desktop, select your existing career-hub repository, click Fetch origin and then Pull origin if offered. Choose Repository > Show in Explorer.
+3. Extract this ZIP. Copy its contents into the repository folder, including the hidden `.github` directory. Replace existing files when prompted. Do not delete the repository's `.git` directory. Keep the `site` folder and workflow paths unchanged.
+4. In GitHub Desktop, check the changes, enter a summary such as `Upgrade Career Hub`, click Commit to main, then Push origin.
+5. On GitHub, open Actions > Daily vacancy search and publish. The push should trigger a deployment. Alternatively, use Run workflow on the main branch. Check that both build and deploy finish successfully.
+6. Open your existing Pages URL and hard refresh (Ctrl+F5). Your tracker and saved results should remain on the same browser and origin. Import your private backup if necessary.
 
-The daily schedule is 07:17 Europe/London. GitHub can delay scheduled runs and may disable schedules after 60 days without repository activity.
+## New installation
+Create a public repository called `career-hub` with default branch `main`, clone it with GitHub Desktop, copy this ZIP's contents, commit and push. In repository Settings > Pages > Build and deployment > Source, select GitHub Actions. Then run the workflow manually.
 
-Optional: only if you have permission to store and publicly redistribute results under your search API plan, add a repository Actions secret named BRAVE_SEARCH_API_KEY. Check costs and eligibility first. Leave it unset for no-key directory searches. Do not commit credentials.
+## Search coverage
+GOV.UK level 6 and level 7, UCAS, Open Apprenticeships, browser-accessible employer feeds, and optional wider-web discovery (51 queries). Coverage is not comprehensive. Source failures and partial data are labelled; unverified leads are not confirmed openings. Actual advertised release dates are distinct from first-discovered dates. Unknown release dates sort last. Hide/unhide preferences remain in this browser and can be included in a tracker backup.
 
-Source failures and partial results are reported; not every employer can be found and web leads are not confirmed openings. The existing public-page parsers require live verification. Use only sources that permit your intended automated collection and publication.
+The schedule remains 07:17 Europe/London daily; GitHub may delay runs or disable inactive schedules. The optional `BRAVE_SEARCH_API_KEY` repository secret is preserved when updating. Only enable search API use if your plan permits storing and redistributing results; check costs and eligibility. Never commit credentials. Live network and real browser rendering were not verified in the build environment. Python compilation, sample Level 6/7 parsers, JS syntax, mock-DOM rendering, hide/unhide, date sorting and the 25 added practice-module lifecycle tests passed.
+
+## Assessments
+38 practice modules grouped into seven provider categories, including 13 existing game simulations and 25 additional reasoning, numerical, attention, judgement and coding drills. These are original practice exercises; provider groupings are suggested preparation categories, not verified replicas or a comprehensive list of actual tests. Follow the instructions supplied by your employer.
